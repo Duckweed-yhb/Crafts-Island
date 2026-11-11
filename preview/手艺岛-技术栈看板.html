@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>手艺岛 · 技术栈要求基准</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23E8B34B' d='M12 2 4 6v6c0 5 3.4 9.5 8 10 4.6-.5 8-5 8-10V6l-8-4z'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="https://miaoda.feishu.cn/fonts/css2?family=Noto+Serif+SC:wght@500;700;900&family=Noto+Sans+SC:wght@300;400;500;700&display=swap">
+<style>
+:root{
+  --bg:#0E1618; --bg2:#132024; --card:#16282D; --card2:#1C3339;
+  --line:rgba(232,179,75,.18); --line2:rgba(255,255,255,.08);
+  --ink:#EAF0EC; --ink2:#A9B7B1; --ink3:#7C8B84;
+  --gold:#E8B34B; --gold2:#C99A3A; --jade:#58B89A; --jade2:#2E8B73;
+  --danger:#C96A5A; --warn:#D9A03F; --ok:#58B89A;
+  --r:14px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%}
+body{
+  background:var(--bg); color:var(--ink);
+  font-family:"Noto Sans SC",system-ui,-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;
+  line-height:1.6; font-weight:300;
+}
+h1,h2,h3,.serif{font-family:"Noto Serif SC",Georgia,"Songti SC","SimSun",serif}
+a{color:var(--gold);text-decoration:none}
+::selection{background:rgba(232,179,75,.25)}
+/* 装饰层 */
+.deco{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+.deco .grid{position:absolute;inset:0;background-image:linear-gradient(var(--line2) 1px,transparent 1px),linear-gradient(90deg,var(--line2) 1px,transparent 1px);background-size:44px 44px;mask-image:radial-gradient(circle at 50% 20%,#000 0,#000 30%,transparent 75%);opacity:.4}
+.deco .glow1{position:absolute;top:-120px;left:20%;width:520px;height:520px;border-radius:50%;background:radial-gradient(circle,rgba(232,179,75,.08),transparent 70%)}
+.deco .glow2{position:absolute;bottom:-160px;right:-80px;width:600px;height:600px;border-radius:50%;background:radial-gradient(circle,rgba(88,184,154,.07),transparent 70%)}
+.wrap{position:relative;z-index:1;max-width:1180px;margin:0 auto;padding:0 20px}
+/* Hero */
+.hero{padding:64px 0 36px}
+.kicker{display:inline-flex;align-items:center;gap:8px;font-size:13px;letter-spacing:.28em;color:var(--gold);text-transform:uppercase;margin-bottom:16px}
+.kicker::before{content:"";width:26px;height:1px;background:var(--gold)}
+.hero h1{font-size:clamp(28px,4.6vw,46px);font-weight:900;letter-spacing:.02em;line-height:1.2;margin-bottom:12px}
+.hero .sub{color:var(--ink2);max-width:660px;font-size:15px}
+.tags{display:flex;flex-wrap:wrap;gap:10px;margin-top:20px}
+.tag{display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border:1px solid var(--line);border-radius:999px;font-size:13px;color:var(--ink2)}
+.tag b{color:var(--gold);font-weight:700}
+/* 程度体系 */
+.scale{padding:28px 0}
+.scale .panel{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:26px}
+.scale h2{font-size:20px;font-weight:700;margin-bottom:4px}
+.scale .lead{color:var(--ink2);font-size:14px;margin-bottom:18px}
+.levels{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.levels .lvl{background:var(--card2);border:1px solid var(--line2);border-radius:10px;padding:16px}
+.levels .lvl .nm{font-family:"Noto Serif SC",serif;font-size:17px;font-weight:700;color:var(--gold);margin-bottom:6px}
+.levels .lvl .do{font-size:13.5px;color:var(--ink);margin-bottom:4px}
+.levels .lvl .ask{font-size:13px;color:var(--ink3)}
+.levels .lvl .ask b{color:var(--jade);font-weight:500}
+/* 技术树全景 */
+.map{padding:12px 0 28px}
+.map h2{font-size:20px;font-weight:700;margin-bottom:4px}
+.map .lead{color:var(--ink2);font-size:14px;margin-bottom:16px}
+.tree{display:flex;flex-direction:column;gap:12px}
+.trow{display:grid;grid-template-columns:150px 1fr;gap:14px;align-items:start}
+.trow .tname{font-family:"Noto Serif SC",serif;font-weight:700;font-size:15px;color:var(--gold);padding:10px 0;border-top:1px solid var(--line)}
+.trow .tnodes{display:flex;flex-wrap:wrap;gap:8px;padding:6px 0}
+.tnode{padding:7px 13px;border:1px solid var(--line);border-radius:8px;font-size:13px;color:var(--ink);background:var(--card);cursor:pointer;transition:.18s}
+.tnode:hover{transform:translateY(-2px);border-color:var(--gold);color:var(--gold)}
+.tnode.on{background:var(--gold);color:#0E1618;border-color:var(--gold);font-weight:500}
+/* 技术卡片区 */
+.cards{padding:8px 0 40px}
+.cards h2{font-size:20px;font-weight:700;margin-bottom:4px}
+.cards .lead{color:var(--ink2);font-size:14px;margin-bottom:16px}
+.filters{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:22px;align-items:center}
+.fgroup{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.fgroup .glabel{font-size:13px;color:var(--ink3);margin-right:2px}
+.fbtn{padding:6px 14px;border:1px solid var(--line);border-radius:8px;font-size:13px;color:var(--ink2);cursor:pointer;background:transparent;transition:.18s;font-family:inherit}
+.fbtn.on{background:var(--gold);color:#0E1618;border-color:var(--gold);font-weight:500}
+.fbtn:hover{border-color:var(--gold);color:var(--gold)}
+.layerhead{display:flex;align-items:baseline;gap:10px;margin:26px 0 14px;padding-top:18px;border-top:1px solid var(--line2)}
+.layerhead .ln{font-family:"Noto Serif SC",serif;font-size:19px;font-weight:700;color:var(--gold)}
+.layerhead .ldesc{font-size:13px;color:var(--ink3)}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+@media(max-width:860px){.grid{grid-template-columns:1fr}}
+.item{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:20px;display:flex;flex-direction:column;gap:12px;transition:.2s}
+.item:hover{transform:translateY(-3px);border-color:var(--gold2)}
+.item .top{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+.item .nm{font-family:"Noto Serif SC",serif;font-size:17px;font-weight:700}
+.item .meta{font-size:12.5px;color:var(--ink3);margin-top:2px}
+.lv{flex-shrink:0;padding:4px 11px;border-radius:999px;font-size:12.5px;font-weight:500;border:1px solid}
+.lv.E{color:var(--warn);border-color:rgba(217,160,63,.4);background:rgba(217,160,63,.08)}
+.lv.P{color:var(--jade);border-color:rgba(88,184,154,.4);background:rgba(88,184,154,.08)}
+.lv.M{color:var(--gold);border-color:rgba(232,179,75,.4);background:rgba(232,179,75,.08)}
+.bars{display:flex;flex-direction:column;gap:9px}
+.bar .bt{font-size:13px;font-weight:500;color:var(--ink);margin-bottom:3px}
+.bar .bc{font-size:13px;color:var(--ink2)}
+.bar .bc b{color:var(--jade);font-weight:500}
+.concepts{display:flex;flex-wrap:wrap;gap:7px}
+.cp{padding:4px 11px;border:1px solid var(--line2);border-radius:6px;font-size:12.5px;color:var(--ink2);background:var(--card2)}
+.deliver{margin-top:auto;padding:11px 13px;border-left:2px solid var(--gold);background:var(--card2);border-radius:0 8px 8px 0;font-size:13px;color:var(--ink)}
+.deliver .dt{font-size:12px;letter-spacing:.14em;color:var(--gold);text-transform:uppercase;margin-bottom:3px;font-weight:500}
+.deliver .dv{font-size:13px;color:var(--ink2)}
+/* 页脚 */
+.foot{padding:34px 0 46px;color:var(--ink3);font-size:13px;text-align:center;border-top:1px solid var(--line2)}
+.foot .n{color:var(--gold)}
+.hidden{display:none!important}
+@media(max-width:640px){
+  .trow{grid-template-columns:1fr;gap:6px}
+  .trow .tname{border-top:none;padding:2px 0 0}
+  .levels{grid-template-columns:1fr}
+  .hero{padding:44px 0 28px}
+}
+</style>
+</head>
+<body>
+<div class="deco" aria-hidden="true"><div class="grid"></div><div class="glow1"></div><div class="glow2"></div></div>
+
+<div class="wrap">
+  <header class="hero">
+    <span class="kicker">Crafts-Island · 技术栈基准</span>
+    <h1>完成手艺岛，需要把技术学到哪一步</h1>
+    <p class="sub">十四座岛民、三端全栈、双后端、插件化、AI 管家层——这份清单客观列出每个技术栈「学到什么程度 + 学什么内容」，以<b style="color:var(--gold);font-weight:500">求职 / 毕业设计作品集级</b>为水准，按「能否扛住面试追问」锚定深度。</p>
+    <div class="tags">
+      <span class="tag">水准 <b>作品集级</b></span>
+      <span class="tag">分级 <b>面试锚定式</b></span>
+      <span class="tag">内容 <b>概念 + 实操验收</b></span>
+      <span class="tag">范围 <b>含 AI 管家层</b></span>
+    </div>
+  </header>
+
+  <section class="scale">
+    <div class="panel">
+      <h2>程度分级 · 面试锚定式</h2>
+      <p class="lead">作品集级不是"会写代码"，而是「能独立交付 + 被面试官深挖不倒」。每个技术按下面三级锚定：</p>
+      <div class="levels">
+        <div class="lvl"><div class="nm">了解 E</div><div class="do">能说出它是什么、解决什么问题、和同类怎么选</div><div class="ask"><b>可被追问</b>：为什么用它、和备选方案的取舍</div></div>
+        <div class="lvl"><div class="nm">熟练 P</div><div class="do">能在项目里独立把它做出来、排掉常见坑</div><div class="ask"><b>可被追问</b>：原理、边界、性能，能讲清为什么这么写</div></div>
+        <div class="lvl"><div class="nm">精通 M</div><div class="do">能把它当作作品的亮点，主动设计、优化、踩过深坑</div><div class="ask"><b>可被追问</b>：底层机制、极端场景、和面试官的对抗讨论</div></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="map">
+    <h2>技术栈全景</h2>
+    <p class="lead">点击任一技术可筛选下方对应的技术卡片。九层按"地基 → 加分"排列。</p>
+    <div class="tree" id="tree"></div>
+  </section>
+
+  <section class="cards" id="cards">
+    <h2>逐项技术要求</h2>
+    <p class="lead">每一项 = 程度锚定 + 概念清单 + 一个可证明学会的实操验收。</p>
+    <div class="filters">
+      <div class="fgroup"><span class="glabel">程度</span><button class="fbtn on" data-lv="ALL">全部</button><button class="fbtn" data-lv="M">精通</button><button class="fbtn" data-lv="P">熟练</button><button class="fbtn" data-lv="E">了解</button></div>
+      <div class="fgroup"><span class="glabel">重置</span><button class="fbtn" id="reset">显示全部层</button></div>
+    </div>
+    <div id="list"></div>
+  </section>
+
+  <footer class="foot">
+    <div>手艺岛 <span class="n">Crafts-Island</span> · 技术栈要求基准 v0.1 · 客观清单 · 作品集级</div>
+  </footer>
+</div>
+
+<!-- ===== DATA ===== -->
+<script>
+const LAYERS = [
+  {id:"L1", name:"语言基础", desc:"所有模块的地基，决定你能走多远"},
+  {id:"L2", name:"后端框架", desc:"双后端：Java + Python，业务与 AI 双线"},
+  {id:"L3", name:"前端与跨端", desc:"Vue3 桌面 + Tauri / UniApp 移动"},
+  {id:"L4", name:"数据库与缓存", desc:"MySQL 关系 + Redis 缓存/会话"},
+  {id:"L5", name:"安全", desc:"AES 加密、JWT 鉴权、防注入"},
+  {id:"L6", name:"部署与运维", desc:"Linux + Nginx + Docker 上线"},
+  {id:"L7", name:"AI 管家层", desc:"LLM 接入、工具编排、RAG 记忆"},
+  {id:"L8", name:"工程化与测试", desc:"Git、单元测试、CI 让项目可维护"}
+];
+const STACK = [
+  {layer:"L1", items:[
+    {n:"Java", lv:"M", do:"能独立用 Java 写出完整后端（SpringBoot 项目），不靠抄", ask:"JVM 内存模型、GC、集合与并发、异常体系", cp:["JVM 与内存模型","集合框架/泛型","并发与锁","Stream/函数式","异常与反射"], dv:"独立完成一个带鉴权+事务的后端微服务并写清 README"},
+    {n:"Python", lv:"P", do:"能用 Python 写数据分析脚本、FastAPI 接口、调 LLM API", ask:"GIL、装饰器、生成器、类与多继承、异步", cp:["语法与数据类型","函数/装饰器/迭代器","异步 asyncio","数据分析 pandas","FastAPI 基础"], dv:"用 FastAPI 写一个可运行的 AI 接口（调 LLM 返回结果）"},
+    {n:"TypeScript", lv:"P", do:"能用 TS 写 Vue3 前端，类型不靠 any 糊弄", ask:"类型系统、泛型、接口 vs 类型别名、模块化", cp:["类型标注/接口/泛型","枚举/联合/推断","tsconfig 配置","与 Vue 的配合"], dv:"用 TS 写一个带类型约束的 Vue3 组件并编译无错"},
+    {n:"SQL", lv:"P", do:"能写多表联查、子查询、索引优化的查询", ask:"三范式、join 种类、事务隔离级别、执行计划", cp:["DDL/DML/DQL","多表 join 与子查询","索引与执行计划","事务 ACID","窗口函数"], dv:"设计 3 张关联表并写出达到业务目的的复杂查询"}
+  ]},
+  {layer:"L2", items:[
+    {n:"Spring Boot", lv:"M", do:"能独立搭 SpringBoot 应用：分层、依赖注入、配置、打包", ask:"IoC/AOP、Bean 生命周期、自动配置原理、Starter 机制", cp:["IoC 与依赖注入","AOP 面向切面","Spring MVC 流程","配置与 Profile","自动配置原理"], dv:"用 SpringBoot 搭出岛民插件化后端骨架，插件可插拔注册"},
+    {n:"Spring Security + JWT", lv:"M", do:"能实现登录鉴权、角色权限、无状态 JWT", ask:"JWT 结构、Token 刷新/失效、过滤器链、密码加密", cp:["JWT 三部分结构","过滤器链/拦截器","RBAC 权限模型","密码哈希 bcrypt","刷新与黑名单"], dv:"实现一套登录 + 权限校验 + 刷新 Token 的完整链路"},
+    {n:"MyBatis-Plus / JPA", lv:"P", do:"能设计表结构并完成 ORM 增删改查与分页", ask:"ORM 原理、Mapper 注入、分页插件、多表关系映射", cp:["ORM 概念","实体与注解","多表关联映射","分页与查询构造器","逻辑删除"], dv:"用 ORM 完成 14 个岛民模块的增删改查与分页"},
+    {n:"FastAPI", lv:"P", do:"能用 FastAPI 写 REST 接口、参数校验、异步处理", ask:"Pydantic 校验、依赖注入、异步路由、Swagger", cp:["路由与请求模型","Pydantic 数据校验","依赖注入","异步与并发","自动文档"], dv:"把 AI 管家层的 LLM 调用封装成 FastAPI 服务"},
+    {n:"WebSocket", lv:"P", do:"能实现服务端主动推送（消息、监控实时数据）", ask:"WebSocket 握手、心跳保活、断线重连、消息广播", cp:["HTTP 与 WebSocket 区别","握手与帧","心跳与重连","会话管理/广播"], dv:"实现屏幕时长实时推送或消息即时通知的通道"},
+    {n:"RESTful 设计", lv:"P", do:"能设计规范的路由、状态码、错误处理、版本化", ask:"资源化设计、幂等、HATEOAS、错误结构", cp:["REST 资源建模","HTTP 方法与状态码","错误处理统一","接口版本化"], dv:"为岛民模块设计一套一致的 REST API 文档"}
+  ]},
+  {layer:"L3", items:[
+    {n:"Vue 3 + Vite", lv:"M", do:"能独立写 Vue3 应用：组合式 API、组件、路由、状态管理", ask:"响应式原理、组合式 vs 选项式、虚拟 DOM、编译优化", cp:["setup/composition","ref/reactive 响应式","组件通信","生命周期","Vite 构建"], dv:"搭出带路由+状态管理的 Vue3 前端骨架"},
+    {n:"Pinia + Router", lv:"P", do:"能管理全局状态与路由守卫（登录拦截）", ask:"状态持久化、模块拆分、路由守卫、懒加载", cp:["Pinia store 设计","持久化插件","路由表与守卫","路由懒加载"], dv:"实现登录态管理 + 未登录自动跳转的守卫"},
+    {n:"Element Plus / UI", lv:"P", do:"能按设计稿组装页面组件与表单校验", ask:"组件库定制主题、表单校验、虚拟滚动、无障碍", cp:["组件布局栅格","表单校验","弹窗/抽屉/表格","主题定制"], dv:"用组件库拼出岛民管理后台的主要页面"},
+    {n:"Axios + 请求封装", lv:"P", do:"能封装请求拦截、统一错误处理、携带 Token", ask:"拦截器原理、并发请求、取消、错误码处理", cp:["拦截器(请求/响应)","Token 注入","统一错误 toast","超时与重试"], dv:"封装一个带拦截器与错误处理的请求模块"},
+    {n:"ECharts 数据可视化", lv:"P", do:"能画折线/柱状/雷达/环形，承载数据分析", ask:"图表配置项、响应式、事件、数据更新", cp:["option 配置体系","常用图表类型","动态数据更新","主题定制"], dv:"画出体重折线、使用时长分布、能力雷达等数据图"},
+    {n:"Tauri（桌面壳）", lv:"E", do:"能把前端包成 Windows 桌面应用并调用系统能力", ask:"Tauri vs Electron、Rust 侧命令、窗口与托盘", cp:["Tauri 架构","IPC 命令","窗口/托盘","打包分发"], dv:"把 Vue3 打包成可安装的 Windows 桌面应用"},
+    {n:"UniApp（移动）", lv:"E", do:"能把页面做到手机/小程序端，一套代码多端", ask:"多端编译、条件编译、原生能力桥接", cp:["跨端原理","条件编译","请求与缓存","打包发布"], dv:"把核心岛民页面做到手机端可运行"}
+  ]},
+  {layer:"L4", items:[
+    {n:"MySQL", lv:"M", do:"能设计规范表结构、写索引、做事务与备份", ask:"存储引擎、索引 B+树、锁、事务隔离、主从", cp:["InnoDB 与索引","事务隔离级别","锁与 MVCC","慢查询优化","备份恢复"], dv:"为 14 个岛民设计完整表结构并通过慢查询优化验证"},
+    {n:"Redis", lv:"P", do:"能用 Redis 做缓存、会话、计数、排行榜", ask:"缓存穿透/击穿/雪崩、持久化、过期策略、数据结构", cp:["五大数据结构","缓存策略与击穿","过期与淘汰","持久化 RDB/AOF"], dv:"给高频接口加 Redis 缓存并解决缓存一致性问题"},
+    {n:"SQL 优化", lv:"P", do:"能用 explain 定位慢查询并优化", ask:"执行计划解读、索引失效场景、分页深翻页", cp:["explain 详解","索引使用与失效","深分页优化","读写分离"], dv:"用 explain 优化至少 3 个慢查询并给出前后对比"}
+  ]},
+  {layer:"L5", items:[
+    {n:"AES 加密", lv:"P", do:"能对敏感数据做对称加密存储与传输", ask:"AES 模式(CBC/GCM)、密钥管理、初始化向量、密钥交换", cp:["对称加密原理","AES 模式与填充","密钥与 IV 管理","HTTPS 下的实践"], dv:"实现屏幕时长/档案等敏感字段的加解密存取"},
+    {n:"JWT + 权限", lv:"P", do:"能在前后端做完整鉴权与越权防护", ask:"Token 泄露风险、越权(水平/垂直)、CSRF、刷新策略", cp:["JWT 签名/验签","RBAC 与数据权限","越权防护","CSRF 与同源"], dv:"做一个带角色权限与越权防护的接口测试用例"},
+    {n:"Web 安全基线", lv:"E", do:"知道常见漏洞并做基本防护", ask:"SQL 注入、XSS、CSRF、SSRF 的成因与防护", cp:["SQL 注入/参数化","XSS 与输出转义","CSRF Token","依赖漏洞"], dv:"用参数化查询修复一处注入点并说明防护原理"}
+  ]},
+  {layer:"L6", items:[
+    {n:"Linux", lv:"P", do:"能在服务器上部署、看日志、配服务、管理进程", ask:"常用命令、权限、systemd、环境变量", cp:["常用命令与管道","用户与权限","systemd 服务","日志查看"], dv:"在一台云服务器上部署前后端并设置开机自启"},
+    {n:"Nginx", lv:"P", do:"能配反向代理、静态资源、HTTPS、负载均衡", ask:"反向代理原理、location 匹配、HTTPS 证书、upstream", cp:["反向代理","静态资源服务","HTTPS/SSL","gzip 与缓存"], dv:"用 Nginx 代理前后端并配好 HTTPS 证书"},
+    {n:"Docker", lv:"P", do:"能把应用容器化并编排多服务", ask:"镜像/容器/网络/卷、Dockerfile、compose", cp:["Dockerfile 编写","镜像与分层","网络与数据卷","docker-compose"], dv:"用 Dockerfile + compose 一键起前后端+数据库+缓存"},
+    {n:"CI/CD 与发布", lv:"E", do:"能配置自动化构建与部署流水线", ask:"GitHub Actions、流水线、回滚、灰度", cp:["GitHub Actions 基础","构建与测试","自动化部署","发布回滚"], dv:"给项目配置一个 push 即构建+部署的 Actions 流水线"}
+  ]},
+  {layer:"L7", items:[
+    {n:"LLM API 接入", lv:"P", do:"能在后端安全接入大模型并处理流式返回", ask:"API 鉴权、上下文窗口、Token 计费、流式/超时/重试", cp:["LLM 接口调用","流式输出 SSE","上下文管理","成本与限流"], dv:"做一个能流式对话、带上下文裁剪的 LLM 接口"},
+    {n:"Prompt 工程", lv:"P", do:"能设计稳定、可复用的提示词与少样本", ask:"角色/指令/约束写法、少样本、输出格式控制、幻觉控制", cp:["提示词结构","少样本示例","JSON 输出约束","幻觉与护栏"], dv:"设计一套「AI 管家」提示词，输出格式 100% 稳定"},
+    {n:"工具调用 / Function Calling", lv:"M", do:"能让模型调用你的工具函数（如查数据、操作岛民）", ask:"工具 schema、参数校验、结果回填、循环调用", cp:["工具定义 schema","函数调用协议","结果解析与回填","调用链安全"], dv:"让 LLM 通过 Function Calling 实际调用「查询体重」工具"},
+    {n:"RAG 与向量检索", lv:"P", do:"能实现知识库问答：文档切分、向量化、检索", ask:"Embedding、向量库、相似度检索、切分策略、重排", cp:["Embedding 向量化","向量数据库","文档切分 chunk","检索与重排"], dv:"做一个基于 RAG 的「岛民说明」问答，能引用原文"},
+    {n:"会话编排", lv:"E", do:"能管理多轮会话状态与 Agent 流程", ask:"对话状态机、多步编排、上下文管理、防死循环", cp:["会话状态管理","多步工作流","超时与护栏"], dv:"实现一个多步对话流程（问目标→逐步推进→产出）"}
+  ]},
+  {layer:"L8", items:[
+    {n:"Git 与协作", lv:"P", do:"能规范提交、分支、解决冲突、rebase", ask:"Git 原理(对象/分支)、merge vs rebase、协作规范", cp:["Git 对象模型","分支与合并","冲突解决","提交规范"], dv:"在一个多模块仓库里用规范分支流程协作并写好提交信息"},
+    {n:"单元测试", lv:"P", do:"能给核心逻辑写测试并覆盖关键路径", ask:"测试框架、断言、Mock、覆盖率的边界", cp:["JUnit/pytest","断言与 Mock","用例设计","覆盖率"], dv:"给插件注册、鉴权、评分等核心逻辑写测试并跑绿"},
+    {n:"工程规范", lv:"E", do:"能写规范代码、分层清晰、可维护", ask:"分层架构、命名、配置外置、日志规范", cp:["分层职责","统一异常处理","日志分级","代码风格"], dv:"让项目通过统一 lint 并保持分层清晰"}
+  ]}
+];
+// ===== RENDER =====
+const LVNAME={M:"精通",P:"熟练",E:"了解"};
+function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");}
+const treeEl=document.getElementById("tree");
+const listEl=document.getElementById("list");
+let actLayer="ALL", actLv="ALL";
+function renderTree(){
+  treeEl.innerHTML=LAYERS.map(L=>`
+    <div class="trow">
+      <div class="tname">${esc(L.name)}<div style="font-size:11px;color:var(--ink3);font-family:'Noto Sans SC';font-weight:300;letter-spacing:.05em">${esc(L.desc)}</div></div>
+      <div class="tnodes">${STACK.filter(s=>s.layer===L.id).flatMap(s=>s.items.map(i=>`<button class="tnode" data-l="${s.layer}" data-i="${esc(i.n)}">${esc(i.n)}</button>`)).join("")}</div>
+    </div>`).join("");
+  treeEl.querySelectorAll(".tnode").forEach(b=>b.addEventListener("click",()=>{
+    actLayer=b.dataset.l; treeEl.querySelectorAll(".tnode").forEach(x=>x.classList.remove("on"));
+    b.classList.add("on");
+    renderList();
+    document.getElementById("cards").scrollIntoView({behavior:"smooth"});
+  }));
+}
+function renderList(){
+  let shown=0;
+  listEl.innerHTML=LAYERS.map(L=>{
+    const sec=STACK.find(s=>s.layer===L.id);
+    if(!sec)return "";
+    const items=sec.items.filter(i=>actLv==="ALL"||i.lv===actLv).filter(i=>actLayer==="ALL"||true);
+    if(actLayer!=="ALL"&&actLayer!==L.id)return "";
+    if(!items.length)return "";
+    shown+=items.length;
+    return `<div class="layerhead"><span class="ln">${esc(L.name)}</span><span class="ldesc">${items.length} 项</span></div>
+      <div class="grid">${items.map(i=>`
+        <div class="item">
+          <div class="top">
+            <div><div class="nm">${esc(i.n)}</div><div class="meta">${esc(L.name)} · ${esc(i.do)}</div></div>
+            <span class="lv ${i.lv}">${LVNAME[i.lv]}</span>
+          </div>
+          <div class="bars">
+            <div class="bar"><div class="bt">能独立做到</div><div class="bc">${esc(i.do)}</div></div>
+            <div class="bar"><div class="bt">面试深挖点 · 可被追问</div><div class="bc"><b>${esc(i.ask)}</b></div></div>
+          </div>
+          <div class="concepts">${i.cp.map(c=>`<span class="cp">${esc(c)}</span>`).join("")}</div>
+          <div class="deliver"><div class="dt">实操验收</div><div class="dv">${esc(i.dv)}</div></div>
+        </div>`).join("")}</div>`;
+  }).join("");
+}
+document.querySelectorAll(".fbtn[data-lv]").forEach(b=>b.addEventListener("click",()=>{
+  document.querySelectorAll(".fbtn[data-lv]").forEach(x=>x.classList.remove("on"));
+  b.classList.add("on"); actLv=b.dataset.lv; renderList();
+}));
+document.getElementById("reset").addEventListener("click",()=>{
+  actLayer="ALL"; treeEl.querySelectorAll(".tnode").forEach(x=>x.classList.remove("on"));
+  renderList();
+});
+renderTree(); renderList();
+</script>
+</body>
+</html>
